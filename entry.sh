@@ -68,8 +68,12 @@ build_all() {
     done
     wait
 }
-build_all
 
+
+step "Go version:"
+go version
+
+build_all
 # ===== 生成统一校验文件 =====
 step "Generating checksums..."
 shopt -s nullglob
@@ -84,6 +88,9 @@ else
     md5sum    "${files[@]}" > "${DIST_ROOT_PATH}/${BIN_NAME}_${VERSION}_checksums.md5"
     success "Checksums generated in ${DIST_ROOT_PATH}"
 fi
+
+step "Build outputs:"
+find "$(realpath "${DIST_ROOT_PATH}")" -maxdepth 1 -type f -exec ls -lh {} \;
 
 # ===== 输出构建文件列表 =====
 files=$(ls "${DIST_ROOT_PATH}"/*.{zip,tar.gz,md5,sha256} 2>/dev/null | tr '\n' ' ')
